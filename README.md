@@ -21,9 +21,10 @@ Play a full chess match in your terminal, with all standard chess rules implemen
 
 ## 🛠️ Installation & Setup
 1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/your-username/CLI-Chess-Game.git
-   cd CLI-Chess-Game
+```bash
+git clone https://github.com/EdgarAmpiire/CLI-Chess-Game.git
+cd CLI-Chess-Game
+```
 
 2. **Install dependencies (Ruby 3.0+ recommended):**
 ```bash
