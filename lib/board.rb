@@ -84,4 +84,19 @@ class Board
     self[0,4] = King.new(:black)
     self[7,4] = King.new(:white)
   end
+
+  def print_board
+    puts "  a b c d e f g h"
+    @grid.each_with_index do |row, r| 
+      line = "#{ 8 - r } "
+      row.each_with_index do |cell, c|
+        line += (cell ? cell.to_s : '.') + ' '
+      end
+      line += "#{ 8 - r }"
+      puts line
+    end
+    puts "  a b c d e f g h" 
+  end
+
+  
 end
