@@ -1,0 +1,195 @@
+---
+:board:
+- :class: Rook
+  :color: :black
+  :pos:
+  - 0
+  - 0
+  :moved: false
+- :class: Knight
+  :color: :black
+  :pos:
+  - 0
+  - 1
+  :moved: false
+- :class: Bishop
+  :color: :black
+  :pos:
+  - 0
+  - 2
+  :moved: false
+- :class: Queen
+  :color: :black
+  :pos:
+  - 0
+  - 3
+  :moved: false
+- :class: King
+  :color: :black
+  :pos:
+  - 0
+  - 4
+  :moved: false
+- :class: Bishop
+  :color: :black
+  :pos:
+  - 0
+  - 5
+  :moved: false
+- :class: Knight
+  :color: :black
+  :pos:
+  - 0
+  - 6
+  :moved: false
+- :class: Rook
+  :color: :black
+  :pos:
+  - 0
+  - 7
+  :moved: false
+- :class: Pawn
+  :color: :black
+  :pos:
+  - 1
+  - 0
+  :moved: false
+- :class: Pawn
+  :color: :black
+  :pos:
+  - 1
+  - 1
+  :moved: false
+- :class: Pawn
+  :color: :black
+  :pos:
+  - 1
+  - 2
+  :moved: false
+- :class: Pawn
+  :color: :black
+  :pos:
+  - 1
+  - 3
+  :moved: false
+- :class: Pawn
+  :color: :black
+  :pos:
+  - 1
+  - 4
+  :moved: false
+- :class: Pawn
+  :color: :black
+  :pos:
+  - 1
+  - 5
+  :moved: false
+- :class: Pawn
+  :color: :black
+  :pos:
+  - 1
+  - 6
+  :moved: false
+- :class: Pawn
+  :color: :black
+  :pos:
+  - 1
+  - 7
+  :moved: false
+- :class: Pawn
+  :color: :white
+  :pos:
+  - 4
+  - 3
+  :moved: true
+- :class: Pawn
+  :color: :white
+  :pos:
+  - 6
+  - 0
+  :moved: false
+- :class: Pawn
+  :color: :white
+  :pos:
+  - 6
+  - 1
+  :moved: false
+- :class: Pawn
+  :color: :white
+  :pos:
+  - 6
+  - 2
+  :moved: false
+- :class: Pawn
+  :color: :white
+  :pos:
+  - 6
+  - 4
+  :moved: false
+- :class: Pawn
+  :color: :white
+  :pos:
+  - 6
+  - 5
+  :moved: false
+- :class: Pawn
+  :color: :white
+  :pos:
+  - 6
+  - 6
+  :moved: false
+- :class: Pawn
+  :color: :white
+  :pos:
+  - 6
+  - 7
+  :moved: false
+- :class: Rook
+  :color: :white
+  :pos:
+  - 7
+  - 0
+  :moved: false
+- :class: Knight
+  :color: :white
+  :pos:
+  - 7
+  - 1
+  :moved: false
+- :class: Bishop
+  :color: :white
+  :pos:
+  - 7
+  - 2
+  :moved: false
+- :class: Queen
+  :color: :white
+  :pos:
+  - 7
+  - 3
+  :moved: false
+- :class: King
+  :color: :white
+  :pos:
+  - 7
+  - 4
+  :moved: false
+- :class: Bishop
+  :color: :white
+  :pos:
+  - 7
+  - 5
+  :moved: false
+- :class: Knight
+  :color: :white
+  :pos:
+  - 7
+  - 6
+  :moved: false
+- :class: Rook
+  :color: :white
+  :pos:
+  - 7
+  - 7
+  :moved: false
+:turn: :black
