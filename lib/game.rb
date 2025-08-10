@@ -1,4 +1,4 @@
-require_relative 'yaml'
+require 'yaml'
 require_relative 'board'
 require_relative 'player'
 
@@ -25,7 +25,7 @@ class Game
         end
       end
 
-      print "Enter move (e.g e2, e4), 'save Name', 'load Name', or 'quit': "
+      print "Enter move (e.g e2 e4), 'save Name', 'load Name', or 'quit': "
       input = gets&.strip
       break unless input
       case input
@@ -37,7 +37,7 @@ class Game
       when  /^load\s+(\S+)/i
         name = $1
         load_game(name)
-      when /^quits$/i
+      when /^quit$/i
         puts 'Goodbye'; break
       when /^(?:[a-h][1-8])\s+(?:[a-h][1-8])$/i
         from_s, to_s = input.split
@@ -57,14 +57,24 @@ class Game
   end
 
   def save(name)
+    safe = name.to_s.strip
+    safe = File.basename(safe)
+    safe = safe.gsub(/\s+/, '_')
+    safe = safe.gsub(/[^0-9A-Za-z_\-]/, '')
+
+    Dir.mkdir(SAVE_DIR) unless Dir.exist?(SAVE_DIR)
+    filename = File.join(Dir.pwd, SAVE_DIR, "#{safe}.yaml")
+
     data = { board: @board.to_serializable, turn: @turn }
-    File.write(File.join(SAVE_DIR, "\#{name}.yaml"), YAML.dump(data))
+    File.write(filename, YAML.dump(data))
+
+    puts "Saved to #{filename}"
   end
 
   def load_game(name)
-    path = File.join(SAVE_DIR, "\#{name}.yaml")
+    path = File.join(SAVE_DIR, "#{name}.yaml")
     unless File.exist?(path)
-      puts "No save named \#{name}."
+      puts "No save named #{name}."
       sleep 1
       return
     end

@@ -119,7 +119,7 @@ class Board
     opponent_positions.any? do |pos|
       r,c = pos
       p = self[r,c]
-      p && p.possible_moves(self, pos).include(king_pos)
+      p && p.possible_moves(self, pos).include?(king_pos)
     end
   end
 
@@ -156,7 +156,7 @@ class Board
     @grid.each_with_index do |row, r|
       row.each_with_index do |cell, c|
         next unless cell
-        data << { class: cell.class.name, color: cell.color, pos: [r,c], moved: cell.respond_to(:moved) ? cell.moved : nil }
+        data << { class: cell.class.name, color: cell.color, pos: [r,c], moved: cell.respond_to?(:moved) ? cell.moved : nil }
       end
     end
     data
