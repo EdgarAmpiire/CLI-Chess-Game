@@ -98,5 +98,99 @@ class Board
     puts "  a b c d e f g h" 
   end
 
-  
+  # Build all legal moves for a color/piece, excluding moves that leaves the king in check
+  def legal_moves_for(from)
+    fr, fc = from
+    piece = self[fr, fc]
+    return [] unless piece
+    pseudo = piece.possible_moves(self, from)
+    pseudo.select do |to|
+      board_copy = deep_dup
+      board_copy.perform_move(from, to, board_copy[fr,fc] || piece_copy(piece))
+      !board_copy.in_check?(piece.color)
+    end
+  end
+
+  def in_check?(color)
+    king_pos = find_king(color)
+    return false unless king_pos
+    opponent_color = color == :white ? :black : :white
+    opponent_positions = pieces_positions(opponent_color)
+    opponent_positions.any? do |pos|
+      r,c = pos
+      p = self[r,c]
+      p && p.possible_moves(self, pos).include(king_pos)
+    end
+  end
+
+  def checkmate?(color)
+    return false unless in_check?(color)
+    all_positions_for(color).none? do |pos|
+      legal_moves_for(pos).any?
+    end
+  end
+
+  def pieces_positions(color)
+    positions = []
+    @grid.each_with_index do |row, r|
+      row.each_with_index do |cell, c|
+        positions << [r,c] if cell && cell.color == color
+      end
+    end
+    positions
+  end
+
+  def all_positions_for(color)
+    pieces_positions(color)
+  end
+
+  def find_king(color)
+    pieces_positions(color).each do |r, c|
+      return [r,c] if self[r,c].is_a?(King)
+    end
+    nil
+  end
+
+  def to_serializable
+    data = []
+    @grid.each_with_index do |row, r|
+      row.each_with_index do |cell, c|
+        next unless cell
+        data << { class: cell.class.name, color: cell.color, pos: [r,c], moved: cell.respond_to(:moved) ? cell.moved : nil }
+      end
+    end
+    data
+  end
+
+  def self.from_serializable(data)
+    b = Board.allocate
+    b.instance_variable_set(:@grid, Array.new(8) { Array.new(8) })
+    data.each do |h|
+      klass = Object.const_get(h[:class])
+      piece = klass.new(h[:color])
+      piece.moved = h[:moved] if h[:moved] && piece.respond_to?(:moved=)
+      r,c = h[:pos]
+      b[r,c] = piece
+    end
+    b
+  end
+
+  def deep_dup
+    dup_board = Board.allocate
+    dup_grid = Array.new(8) { Array.new(8) }
+    @grid.each_with_index do |row, r|
+      row.each_with_index do |cell, c|
+        dup_grid[r][c] = cell ? cell.dup_shallow : nil
+      end
+    end
+    dup_board.instance_variable_set(:@grid, dup_grid)
+    dup_board
+  end
+
+  private
+
+  def piece_copy
+    piece.dup_shallow
+  end
+
 end
