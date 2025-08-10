@@ -32,6 +32,8 @@ bundle install
 ```
 _(If you don’t have Bundler installed, run gem install bundler first.)_
 
+---
+
 ## ▶️ How to Play
 _Run the game from the terminal:_
 ```bash
@@ -47,6 +49,7 @@ ruby bin/chess.rb
 
 - Load a saved game: Run the program and choose the load option
 
+---
 
 ## 📂 Project Structure
 ```python
@@ -91,10 +94,13 @@ _Run tests with:_
 rspec
 ```
 
+---
+
 ## 🏆 Credits
 Built by **Edgar Ampiire** as part of The Odin Project Ruby curriculum.
 
-## 📄 License
+
+<!-- ## 📄 License
 **This project is licensed under the MIT License.**
 ```sql
 MIT License
@@ -118,4 +124,4 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-```
+``` -->
