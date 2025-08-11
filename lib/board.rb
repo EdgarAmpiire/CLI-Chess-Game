@@ -140,6 +140,26 @@ class Board
     positions
   end
 
+  # Checks if a given square is attacked by any enemy piece
+  def square_attacked?(square, color)
+    r, c = square
+    enemy_color = (color == :white ? :black : :white)
+    pieces_positions(enemy_color).any? do |pos|
+      pr, pc = pos
+      piece = self[pr, pc]
+      next false unless piece
+
+      if piece.is_a?(Pawn)
+        # Pawn attacks diagonally forward
+        direction = (piece.color == :white ? -1 : 1)
+        pawn_attacks = [[pr + direction, pc - 1], [pr + direction , pc + 1]]
+        pawn_attacks.include?([r, c])
+      else
+        piece.possible_moves(self, [pr, pc]).include?([r, c])
+      end
+    end
+  end
+
   def all_positions_for(color)
     pieces_positions(color)
   end
