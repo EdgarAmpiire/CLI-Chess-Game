@@ -8,9 +8,11 @@ require_relative 'pieces/pawn'
 
 class Board
   attr_reader :grid
+  attr_accessor :en_passant_target
 
   def initialize
     @grid = Array.new(8) { Array.new(8) }
+    @en_passant_target = nil
     setup_pieces
   end
 
@@ -47,9 +49,28 @@ class Board
 
   def perform_move(from, to, piece)
     fr, fc = from; tr, tc = to
+
+    # Store the current en passant target before clearing
+    current_ep_target = @en_passant_target
+
+    # Reset en passant target each move
+    @en_passant_target = nil
+
+    # Detect en passant capture before resetting target
+    if piece.is_a?(Pawn) && to == current_ep_target
+      captured_pawn_row = fr
+      captured_pawn_col = tc
+      self[captured_pawn_row, captured_pawn_col] = nil
+    end
+
     self[tr, tc] = piece
     self[fr, fc] = nil
     piece.moved = true if piece.respond_to?(:moved=)
+
+    # Detect double pawn move (to set en passant target)
+    if piece.is_a?(Pawn) && (tr - fr).abs == 2
+      @en_passant_target = [(fr + tr) / 2, fc]
+    end
 
     # Pawn promotion (to queen) if reaches last rank
     if piece.is_a?(Pawn) && ( tr == 0 || tr == 7 )
@@ -140,6 +161,26 @@ class Board
     positions
   end
 
+  # Checks if a given square is attacked by any enemy piece
+  def square_attacked?(square, color)
+    r, c = square
+    enemy_color = (color == :white ? :black : :white)
+    pieces_positions(enemy_color).any? do |pos|
+      pr, pc = pos
+      piece = self[pr, pc]
+      next false unless piece
+
+      if piece.is_a?(Pawn)
+        # Pawn attacks diagonally forward
+        direction = (piece.color == :white ? -1 : 1)
+        pawn_attacks = [[pr + direction, pc - 1], [pr + direction , pc + 1]]
+        pawn_attacks.include?([r, c])
+      else
+        piece.possible_moves(self, [pr, pc]).include?([r, c])
+      end
+    end
+  end
+
   def all_positions_for(color)
     pieces_positions(color)
   end
@@ -165,6 +206,7 @@ class Board
   def self.from_serializable(data)
     b = Board.allocate
     b.instance_variable_set(:@grid, Array.new(8) { Array.new(8) })
+    b.instance_variable_set(:@en_passant_target, nil) # initialize en passant target on load
     data.each do |h|
       klass = Object.const_get(h[:class])
       piece = klass.new(h[:color])
