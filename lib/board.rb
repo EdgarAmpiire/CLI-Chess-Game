@@ -8,9 +8,11 @@ require_relative 'pieces/pawn'
 
 class Board
   attr_reader :grid
+  attr_accessor :en_passant_target
 
   def initialize
     @grid = Array.new(8) { Array.new(8) }
+    @en_passant_target = nil
     setup_pieces
   end
 
@@ -47,6 +49,22 @@ class Board
 
   def perform_move(from, to, piece)
     fr, fc = from; tr, tc = to
+
+    # Reset en passant target each move
+    @en_passant_target = nil
+
+    # Detect double pawn move (to set en passant target)
+    if piece.is_a?(Pawn) && (tr - fr).abs == 2
+      @en_passant_target = [(fr + tr)/2, fc]
+    end
+
+    # Detect en passant capture
+    if piece.is_a?(Pawn) && to == @en_passant_target
+      capture_pawn_row = fr
+      capture_pawn_col = tc
+      self[capture_pawn_row, capture_pawn_col] = nil
+    end
+
     self[tr, tc] = piece
     self[fr, fc] = nil
     piece.moved = true if piece.respond_to?(:moved=)
@@ -185,6 +203,7 @@ class Board
   def self.from_serializable(data)
     b = Board.allocate
     b.instance_variable_set(:@grid, Array.new(8) { Array.new(8) })
+    b.instance_variable_set(:@en_passant_target, nil) # initialize en passant target on load
     data.each do |h|
       klass = Object.const_get(h[:class])
       piece = klass.new(h[:color])
