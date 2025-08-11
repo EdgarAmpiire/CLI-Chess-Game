@@ -50,24 +50,27 @@ class Board
   def perform_move(from, to, piece)
     fr, fc = from; tr, tc = to
 
+    # Store the current en passant target before clearing
+    current_ep_target = @en_passant_target
+
     # Reset en passant target each move
     @en_passant_target = nil
 
-    # Detect double pawn move (to set en passant target)
-    if piece.is_a?(Pawn) && (tr - fr).abs == 2
-      @en_passant_target = [(fr + tr)/2, fc]
-    end
-
-    # Detect en passant capture
-    if piece.is_a?(Pawn) && to == @en_passant_target
-      capture_pawn_row = fr
-      capture_pawn_col = tc
-      self[capture_pawn_row, capture_pawn_col] = nil
+    # Detect en passant capture before resetting target
+    if piece.is_a?(Pawn) && to == current_ep_target
+      captured_pawn_row = fr
+      captured_pawn_col = tc
+      self[captured_pawn_row, captured_pawn_col] = nil
     end
 
     self[tr, tc] = piece
     self[fr, fc] = nil
     piece.moved = true if piece.respond_to?(:moved=)
+
+    # Detect double pawn move (to set en passant target)
+    if piece.is_a?(Pawn) && (tr - fr).abs == 2
+      @en_passant_target = [(fr + tr) / 2, fc]
+    end
 
     # Pawn promotion (to queen) if reaches last rank
     if piece.is_a?(Pawn) && ( tr == 0 || tr == 7 )
